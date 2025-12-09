@@ -13,6 +13,14 @@ class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
+class AItem;
+
+enum class ECharacterState 
+{
+	Unequipped,
+	EquippedOneHandedWeapon,
+	EquippedTwoHandedWeapon
+};
 
 UCLASS()
 class SLASH_API ASlashCharacter : public ACharacter
@@ -40,8 +48,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> JumpAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> EquipAction;
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void Equip();
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -55,5 +67,11 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Hair)
 	TObjectPtr<UGroomComponent> Eyebrows;
+
+	UPROPERTY(VisibleInstanceOnly)
+	TObjectPtr<AItem> OverlappingItem;
+
+public: //Setters
+	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
 
 };
