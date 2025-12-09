@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "GroomComponent.h"
+#include "CharacterTypes.h"
 #include "SlashCharacter.generated.h"
 
 class UInputMappingContext;
@@ -14,13 +15,6 @@ class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
 class AItem;
-
-enum class ECharacterState 
-{
-	Unequipped,
-	EquippedOneHandedWeapon,
-	EquippedTwoHandedWeapon
-};
 
 UCLASS()
 class SLASH_API ASlashCharacter : public ACharacter
@@ -56,6 +50,9 @@ protected:
 	void Equip();
 
 private:
+
+	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> SpringArm;
 
@@ -71,7 +68,7 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	TObjectPtr<AItem> OverlappingItem;
 
-public: //Setters
+public:
 	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
-
+	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
 };
