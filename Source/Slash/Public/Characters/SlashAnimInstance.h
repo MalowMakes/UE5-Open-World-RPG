@@ -33,5 +33,6 @@ public:
     UPROPERTY(BlueprintReadOnly, Category = Movement)
     bool isFalling;
 
+    UPROPERTY(BlueprintReadOnly, Category = "Movement | Character State")
     ECharacterState CharacterState;
 };
