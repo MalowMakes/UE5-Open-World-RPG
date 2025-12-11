@@ -6,9 +6,7 @@
 #include "Items/Item.h"
 #include "Weapon.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class SLASH_API AWeapon : public AItem
 {
