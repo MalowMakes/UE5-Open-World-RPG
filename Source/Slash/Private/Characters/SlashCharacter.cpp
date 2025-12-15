@@ -12,6 +12,7 @@
 #include "Items/Item.h"
 #include "Items/Weapons/Weapon.h"
 #include "Animation/AnimMontage.h"
+#include "Components/BoxComponent.h"
 
 ASlashCharacter::ASlashCharacter()
 {
@@ -174,7 +175,13 @@ void ASlashCharacter::PlayEquipMontage(FName SectionName)
 	}
 }
 
-
+void ASlashCharacter::SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled)
+{
+	if (EquippedWeapon && EquippedWeapon->GetWeaponBox())
+	{
+		EquippedWeapon->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
+	}
+}
 
 void ASlashCharacter::Attack()
 {
