@@ -10,6 +10,7 @@ Assets
 *.VC.db
 *.opensdf
 *.opendb
+*.png
 *.sdf
 *.sln
 *.suo
