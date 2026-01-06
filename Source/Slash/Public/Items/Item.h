@@ -53,6 +53,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USphereComponent> Sphere;
 
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UNiagaraComponent> EmbersEffect;
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float RunningTime;
