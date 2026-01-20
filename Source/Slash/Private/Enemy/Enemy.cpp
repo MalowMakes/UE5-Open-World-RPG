@@ -1,6 +1,9 @@
 #include "Enemy/Enemy.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "AIController.h"
+#include "Navigation/PathFollowingComponent.h"
 #include "Slash/DebugMacros.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -20,6 +23,11 @@ AEnemy::AEnemy()
 	Attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
 	HealthBarWidget = CreateDefaultSubobject<UHealthBarComponent> (TEXT("HealthBar"));
 	HealthBarWidget->SetupAttachment(GetRootComponent());
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 }
 
 void AEnemy::BeginPlay()
@@ -29,25 +37,9 @@ void AEnemy::BeginPlay()
 	{
 		HealthBarWidget->SetVisibility(false);
 	}
-}
 
-void AEnemy::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (CombatTarget)
-	{
-		const double DistanceToTarget = (CombatTarget->GetActorLocation() - GetActorLocation()).Size();
-		if (DistanceToTarget > CombatRadius)
-		{
-			CombatTarget = nullptr;
-			if (HealthBarWidget)
-			{
-				HealthBarWidget->SetVisibility(false);
-			}
-		}
-	}
-
+	EnemyController = Cast<AAIController>(GetController());
+	MoveToTarget(PatrolTarget);
 }
 
 void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -55,50 +47,82 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-void AEnemy::Die()
+
+void AEnemy::Tick(float DeltaTime)
 {
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance && DeathMontage)
+	Super::Tick(DeltaTime);
+
+
+	CheckCombatTarget();
+	CheckPatrolTarget();
+}
+
+void AEnemy::CheckPatrolTarget()
+{
+	if (InTargetRange(PatrolTarget, PatrolRadius))
 	{
-		AnimInstance->Montage_Play(DeathMontage);
+		PatrolTarget = ChoosePatrolTarget();
+		const float WaitTime = FMath::RandRange(WaitMin, WaitMax);
+		GetWorldTimerManager().SetTimer(PatrolTimer, this, &AEnemy::PatrolTimerFinished, WaitTime);
+	}
+}
 
-		const int32 Selection = FMath::RandRange(0, 4);
-		FName SectionName = FName();
-		switch (Selection)
-		{
-		case 0:
-			SectionName = FName("Death1");
-			DeathPose = EDeathPose::EDP_Death1;
-			break;
-		case 1:
-			SectionName = FName("Death2");
-			DeathPose = EDeathPose::EDP_Death2;
-			break;
-		case 2:
-			SectionName = FName("Death3");
-			DeathPose = EDeathPose::EDP_Death3;
-			break;
-		case 3:
-			SectionName = FName("Death4");
-			DeathPose = EDeathPose::EDP_Death4;
-			break;
-		case 4:
-			SectionName = FName("Death5");
-			DeathPose = EDeathPose::EDP_Death5;
-			break;
-		default:
-			break;
-		}
-
-		AnimInstance->Montage_JumpToSection(SectionName, DeathMontage);
+void AEnemy::CheckCombatTarget()
+{
+	if (!InTargetRange(CombatTarget, CombatRadius))
+	{
+		CombatTarget = nullptr;
 		if (HealthBarWidget)
 		{
 			HealthBarWidget->SetVisibility(false);
 		}
 	}
+}
 
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	SetLifeSpan(30.f);
+
+
+bool AEnemy::InTargetRange(AActor* Target, double Radius)
+{
+	if (Target == nullptr) return false;
+	const double DistanceToTarget = (Target->GetActorLocation() - GetActorLocation()).Size();
+	DRAW_SPHERE_SingleFrame(GetActorLocation());
+	DRAW_SPHERE_SingleFrame(Target->GetActorLocation());
+	return DistanceToTarget <= Radius;
+}
+
+void AEnemy::MoveToTarget(AActor* Target)
+{
+	if (EnemyController == nullptr || Target == nullptr) return;
+		FAIMoveRequest MoveRequest;
+		MoveRequest.SetGoalActor(Target);
+		MoveRequest.SetAcceptanceRadius(15.f);
+		EnemyController->MoveTo(MoveRequest);
+}
+
+AActor* AEnemy::ChoosePatrolTarget()
+{
+	TArray<AActor*> ValidTargets;
+	for (AActor* Target : PatrolTargets)
+	{
+		if (Target != PatrolTarget)
+		{
+			ValidTargets.AddUnique(Target);
+		}
+	}
+
+	const int32 NumValidTargets = ValidTargets.Num();
+	if (NumValidTargets > 0) 
+	{
+		const int32 Selection = FMath::RandRange(0, NumValidTargets - 1);
+		return ValidTargets[Selection];
+	}
+
+	return nullptr;
+}
+
+void AEnemy::PatrolTimerFinished()
+{
+	MoveToTarget(PatrolTarget);
 }
 
 void AEnemy::PlayHitReactMontage(const FName& SectionName)
@@ -202,5 +226,50 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	}
 	CombatTarget = EventInstigator->GetPawn();
 	return DamageAmount;
+}
+void AEnemy::Die()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && DeathMontage)
+	{
+		AnimInstance->Montage_Play(DeathMontage);
+
+		const int32 Selection = FMath::RandRange(0, 4);
+		FName SectionName = FName();
+		switch (Selection)
+		{
+		case 0:
+			SectionName = FName("Death1");
+			DeathPose = EDeathPose::EDP_Death1;
+			break;
+		case 1:
+			SectionName = FName("Death2");
+			DeathPose = EDeathPose::EDP_Death2;
+			break;
+		case 2:
+			SectionName = FName("Death3");
+			DeathPose = EDeathPose::EDP_Death3;
+			break;
+		case 3:
+			SectionName = FName("Death4");
+			DeathPose = EDeathPose::EDP_Death4;
+			break;
+		case 4:
+			SectionName = FName("Death5");
+			DeathPose = EDeathPose::EDP_Death5;
+			break;
+		default:
+			break;
+		}
+
+		AnimInstance->Montage_JumpToSection(SectionName, DeathMontage);
+		if (HealthBarWidget)
+		{
+			HealthBarWidget->SetVisibility(false);
+		}
+	}
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SetLifeSpan(30.f);
 }
 

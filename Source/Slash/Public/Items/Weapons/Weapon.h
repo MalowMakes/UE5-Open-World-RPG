@@ -18,7 +18,7 @@ public:
 	void Equip(USceneComponent* InParent, FName InSocketName, AActor* NewOwner, APawn* NewInstigator);
 	void AttatchMeshToSocket(USceneComponent* InParent, const FName& InSocketName);
 
-	TArray<AActor*> IgnoreActors;
+	TArray<TObjectPtr<AActor>> IgnoreActors;
 
 protected:
 	virtual void BeginPlay() override;
