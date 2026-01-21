@@ -50,6 +50,8 @@ void ASlashCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Tags.Add(FName("SlashCharacter"));
+
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))

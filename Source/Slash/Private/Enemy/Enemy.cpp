@@ -1,14 +1,15 @@
 #include "Enemy/Enemy.h"
+#include "AIController.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/AttributeComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "AIController.h"
+#include "Perception/PawnSensingComponent.h"
+#include "HUD/HealthBarComponent.h"
 #include "Navigation/PathFollowingComponent.h"
-#include "Slash/DebugMacros.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
-#include "Components/AttributeComponent.h"
-#include "HUD/HealthBarComponent.h"
+#include "Slash/DebugMacros.h"
 
 AEnemy::AEnemy()
 {
@@ -25,9 +26,14 @@ AEnemy::AEnemy()
 	HealthBarWidget->SetupAttachment(GetRootComponent());
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+
+	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
+	PawnSensing->SightRadius = CombatRadius;
+	PawnSensing->SetPeripheralVisionAngle(45.f);
 }
 
 void AEnemy::BeginPlay()
@@ -40,6 +46,11 @@ void AEnemy::BeginPlay()
 
 	EnemyController = Cast<AAIController>(GetController());
 	MoveToTarget(PatrolTarget);
+
+	if (PawnSensing)
+	{
+		PawnSensing->OnSeePawn.AddUniqueDynamic(this, &AEnemy::PawnSeen);
+	}
 }
 
 void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -52,9 +63,13 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
-	CheckCombatTarget();
-	CheckPatrolTarget();
+	if (EnemyState > EEnemyState::EES_Patrolling)
+	{
+		CheckCombatTarget();
+	}
+	else {
+		CheckPatrolTarget();
+	}
 }
 
 void AEnemy::CheckPatrolTarget()
@@ -71,11 +86,27 @@ void AEnemy::CheckCombatTarget()
 {
 	if (!InTargetRange(CombatTarget, CombatRadius))
 	{
+		//Outside combat radius, lose interest
 		CombatTarget = nullptr;
 		if (HealthBarWidget)
 		{
 			HealthBarWidget->SetVisibility(false);
 		}
+		EnemyState = EEnemyState::EES_Patrolling;
+		GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
+		MoveToTarget(PatrolTarget);
+	}
+	else if (!InTargetRange(CombatTarget, AttackRadius) && EnemyState != EEnemyState::EES_Chasing)
+	{
+		//Outside attack range, chase character
+		EnemyState = EEnemyState::EES_Chasing;
+		GetCharacterMovement()->MaxWalkSpeed = 300.f;
+		MoveToTarget(CombatTarget);
+	}
+	else if (InTargetRange(CombatTarget, AttackRadius) && EnemyState != EEnemyState::EES_Attacking)
+	{
+		//Inside attack range, attack character
+		EnemyState = EEnemyState::EES_Attacking;
 	}
 }
 
@@ -85,8 +116,6 @@ bool AEnemy::InTargetRange(AActor* Target, double Radius)
 {
 	if (Target == nullptr) return false;
 	const double DistanceToTarget = (Target->GetActorLocation() - GetActorLocation()).Size();
-	DRAW_SPHERE_SingleFrame(GetActorLocation());
-	DRAW_SPHERE_SingleFrame(Target->GetActorLocation());
 	return DistanceToTarget <= Radius;
 }
 
@@ -98,6 +127,16 @@ void AEnemy::MoveToTarget(AActor* Target)
 		MoveRequest.SetAcceptanceRadius(15.f);
 		EnemyController->MoveTo(MoveRequest);
 }
+
+void AEnemy::BeginChase(APawn* Target)
+{
+	EnemyState = EEnemyState::EES_Chasing;
+	GetWorldTimerManager().ClearTimer(PatrolTimer);
+	GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
+	CombatTarget = Target;
+	MoveToTarget(CombatTarget);
+}
+
 
 AActor* AEnemy::ChoosePatrolTarget()
 {
@@ -118,6 +157,15 @@ AActor* AEnemy::ChoosePatrolTarget()
 	}
 
 	return nullptr;
+}
+
+void AEnemy::PawnSeen(APawn* SeenPawn)
+{
+	if (EnemyState != EEnemyState::EES_Patrolling) return;
+	if (SeenPawn->ActorHasTag(FName("SlashCharacter")))
+	{
+		BeginChase(SeenPawn);
+	}
 }
 
 void AEnemy::PatrolTimerFinished()
@@ -224,7 +272,7 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 		Attributes->ReceiveDamage(DamageAmount);
 		HealthBarWidget->SetHealthPercent(Attributes->GetHealthPercent());
 	}
-	CombatTarget = EventInstigator->GetPawn();
+	BeginChase(EventInstigator->GetPawn());
 	return DamageAmount;
 }
 void AEnemy::Die()

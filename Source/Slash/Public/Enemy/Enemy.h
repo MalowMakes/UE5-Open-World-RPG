@@ -11,6 +11,7 @@
 class UAnimMontage;
 class UAttributeComponent;
 class UHealthBarComponent;
+class UPawnSensingComponent;
 
 UCLASS()
 class SLASH_API AEnemy : public ACharacter, public IHitInterface
@@ -32,9 +33,18 @@ protected:
 	virtual void BeginPlay() override;
 
 	void Die();
+
+	/**
+	* Nav Functions
+	*/
+
 	bool InTargetRange(AActor* Target, double Radius);
 	void MoveToTarget(AActor* Target);
+	void BeginChase(APawn* Target);
 	AActor* ChoosePatrolTarget();
+
+	UFUNCTION()
+	void PawnSeen(APawn* SeenPawn);
 
 	/**
 	* Play montage functions
@@ -47,11 +57,18 @@ protected:
 
 private:
 
+	/**
+	* Components
+	*/
+
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAttributeComponent> Attributes;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UHealthBarComponent> HealthBarWidget;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UPawnSensingComponent> PawnSensing;
 
 	/**
 	* Animation montages
@@ -73,7 +90,10 @@ private:
 	TObjectPtr<AActor> CombatTarget;
 
 	UPROPERTY(EditAnywhere)
-	double CombatRadius = 500.f;
+	double CombatRadius = 750.f;
+
+	UPROPERTY(EditAnywhere)
+	float AttackRadius = 150.f;
 
 	/**
 	* Navigation
@@ -91,6 +111,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "AI Navigation")
 	double PatrolRadius = 200.f;
 
+
 	FTimerHandle PatrolTimer;
 	void PatrolTimerFinished();
 
@@ -99,6 +120,13 @@ private:
 	UPROPERTY(EditAnywhere, Category = "AI Navigation")
 	float WaitMax = 10.f;
 
+	UPROPERTY(EditAnywhere, Category = "AI Navigation")
+	float PatrolSpeed = 125.f;
+
+	UPROPERTY(EditAnywhere, Category = "AI Navigation")
+	float ChaseSpeed = 350.f;
+
+	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 
 public:	
 	
