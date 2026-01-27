@@ -179,6 +179,7 @@ void ASlashCharacter::PlayEquipMontage(const FName& SectionName)
 
 void ASlashCharacter::Attack()
 {
+	Super::Attack();
 	if (CanAttack()) {
 		PlayAttackMontage();
 		ActionState = EActionState::EAS_Attacking;
@@ -198,6 +199,7 @@ void ASlashCharacter::AttackEnd()
 
 void ASlashCharacter::PlayAttackMontage()
 {
+	Super::PlayAttackMontage();
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && AttackMontage)
 	{
