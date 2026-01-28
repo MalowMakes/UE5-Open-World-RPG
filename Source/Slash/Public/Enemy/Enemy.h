@@ -27,15 +27,14 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
 	virtual void Die() override;
 	virtual void Attack() override;
-	virtual void PlayAttackMontage() override;
 	virtual bool CanAttack() override;
 	virtual void HandleDamage(float DamageAmount) override;
+	virtual int32 PlayDeathMontage() override;
 
-	UPROPERTY(BlueprintReadOnly)
-	EDeathPose DeathPose;
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float DeathLifeSpan = 8.f;
 
 	UPROPERTY(BlueprintReadOnly)
 	EEnemyState EnemyState = EEnemyState::EES_Patrolling;

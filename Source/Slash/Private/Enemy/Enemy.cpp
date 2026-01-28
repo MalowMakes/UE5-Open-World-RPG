@@ -154,30 +154,6 @@ void AEnemy::Attack()
 	PlayAttackMontage();
 }
 
-void AEnemy::PlayAttackMontage()
-{
-	Super::PlayAttackMontage();
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance && AttackMontage)
-	{
-		AnimInstance->Montage_Play(AttackMontage);
-		const int32 Selection = FMath::RandRange(0, 1);
-		FName SectionName = FName();
-		switch (Selection)
-		{
-		case 0:
-			SectionName = FName("Attack1");
-			break;
-		case 1:
-			SectionName = FName("Attack2");
-			break;
-		default:
-			break;
-		}
-		AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
-	}
-}
-
 bool AEnemy::CanAttack()
 {
 	bool bCanAttack =
@@ -194,6 +170,12 @@ void AEnemy::HandleDamage(float DamageAmount)
 	{
 		HealthBarWidget->SetHealthPercent(Attributes->GetHealthPercent());
 	}
+}
+
+int32 AEnemy::PlayDeathMontage()
+{
+	const int32 Selection = Super::PlayDeathMontage();
+	return Selection;
 }
 
 void AEnemy::PawnSeen(APawn* SeenPawn)
@@ -321,44 +303,11 @@ void AEnemy::Destroyed()
 
 void AEnemy::Die()
 {
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance && DeathMontage)
-	{
-		AnimInstance->Montage_Play(DeathMontage);
-
-		const int32 Selection = FMath::RandRange(0, 4);
-		FName SectionName = FName();
-		switch (Selection)
-		{
-		case 0:
-			SectionName = FName("Death1");
-			DeathPose = EDeathPose::EDP_Death1;
-			break;
-		case 1:
-			SectionName = FName("Death2");
-			DeathPose = EDeathPose::EDP_Death2;
-			break;
-		case 2:
-			SectionName = FName("Death3");
-			DeathPose = EDeathPose::EDP_Death3;
-			break;
-		case 3:
-			SectionName = FName("Death4");
-			DeathPose = EDeathPose::EDP_Death4;
-			break;
-		case 4:
-			SectionName = FName("Death5");
-			DeathPose = EDeathPose::EDP_Death5;
-			break;
-		default:
-			break;
-		}
-
-		AnimInstance->Montage_JumpToSection(SectionName, DeathMontage);
-		HideHealthBar();
-	}
-
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	SetLifeSpan(30.f);
+	EnemyState = EEnemyState::EES_Dead;
+	ClearAttackTimer();
+	PlayDeathMontage();
+	HideHealthBar();
+	DisableCapsule();
+	SetLifeSpan(DeathLifeSpan);
 }
 

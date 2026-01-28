@@ -45,15 +45,18 @@ protected:
 	/**
 	* Play montage functions
 	*/
-	virtual void PlayAttackMontage();
-	void PlayHitReactMontage(const FName& SectionName);
-	
 
-	
+	void PlayHitReactMontage(const FName& SectionName);
+	void PlayMontageSection(UAnimMontage* Montage, const FName& SectionName);
+	int32 PlayRandomMontageSection(UAnimMontage* Montage);
+	int32 PlayAttackMontage();
+	virtual int32 PlayDeathMontage();
+	void DisableCapsule();
 
 	/**
 	* Animation montages
 	*/
+
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	TObjectPtr<UAnimMontage> AttackMontage;
 	
