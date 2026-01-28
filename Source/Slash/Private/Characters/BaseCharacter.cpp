@@ -14,6 +14,7 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 }
 
 void ABaseCharacter::BeginPlay()
@@ -44,14 +45,14 @@ void ABaseCharacter::AttackEnd()
 {
 }
 
-int32 ABaseCharacter::PlayAttackMontage()
+void ABaseCharacter::PlayAttackMontage()
 {
-	return PlayRandomMontageSection(AttackMontage);
+	PlayRandomMontageSection(AttackMontage);
 }
 
-int32 ABaseCharacter::PlayDeathMontage()
+void ABaseCharacter::PlayDeathMontage()
 {
-	return PlayRandomMontageSection(DeathMontage);
+	PlayRandomMontageSection(DeathMontage);
 }
 
 void ABaseCharacter::DisableCapsule()
@@ -79,14 +80,13 @@ void ABaseCharacter::PlayMontageSection(UAnimMontage* Montage, const FName& Sect
 	}
 }
 
-int32 ABaseCharacter::PlayRandomMontageSection(UAnimMontage* Montage)
+void ABaseCharacter::PlayRandomMontageSection(UAnimMontage* Montage)
 {
 	const int32 MontageSections = Montage->GetNumSections();
-	if (MontageSections <= 0) return -1;
+	if (MontageSections <= 0) return;
 	const int32 Selection = FMath::RandRange(0, MontageSections - 1);
 	const FName Section = Montage->GetSectionName(Selection);
 	PlayMontageSection(Montage, Section);
-	return Selection;
 }
 
 void ABaseCharacter::DirectionalHitReact(const FVector& ImpactPoint)
@@ -151,7 +151,7 @@ void ABaseCharacter::SpawnHitParticles(const FVector& ImpactPoint)
 	}
 }
 
-void ABaseCharacter::HandleDamage(float DamageAmount)
+void ABaseCharacter::ApplyDamage(float DamageAmount)
 {
 	if (Attributes)
 	{
