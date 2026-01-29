@@ -59,6 +59,7 @@ void AEnemy::BeginPlay()
 		DefaultWeapon->Equip(GetMesh(), FName("RightHandSocket"), this, this);
 		EquippedWeapon = DefaultWeapon;
 	}
+	Tags.Add(FName("Enemy"));
 }
 
 void AEnemy::Tick(float DeltaTime)
@@ -315,7 +316,7 @@ void AEnemy::PawnSeen(AActor* Actor, FAIStimulus Stimulus)
 	const bool bShouldChaseTarget =
 		EnemyState == EEnemyState::EES_Patrolling &&
 		Stimulus.WasSuccessfullySensed() &&
-		Actor->ActorHasTag(FName("SlashCharacter"));
+		Actor->ActorHasTag(FName("AttackableTarget"));
 
 	if (bShouldChaseTarget)
 	{
