@@ -9,6 +9,9 @@
 
 class UHealthBarComponent;
 class UPawnSensingComponent;
+class UAIPerceptionComponent;
+class UAISenseConfig_Sight;
+struct FAIStimulus;
 
 UCLASS()
 class SLASH_API AEnemy : public ABaseCharacter
@@ -68,13 +71,19 @@ private:
 	bool InTargetRange(AActor* Target, double Radius);
 
 	UFUNCTION()
-	void PawnSeen(APawn* SeenPawn); // Callback for OnPawnSeen in UPawnSensingComponent
+	void PawnSeen(AActor* Actor, FAIStimulus Stimulus); // Callback for OnPawnSeen in UPawnSensingComponent
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UHealthBarComponent> HealthBarWidget;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UPawnSensingComponent> PawnSensing;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr <UAIPerceptionComponent> AIPerceptionComponent;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UAISenseConfig_Sight> SightConfig;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf <class AWeapon> WeaponClass;

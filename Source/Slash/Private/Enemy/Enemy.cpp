@@ -3,7 +3,9 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/AttributeComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Perception/PawnSensingComponent.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AIPerceptionTypes.h"
 #include "HUD/HealthBarComponent.h"
 #include "Items/Weapons/Weapon.h"
 #include "Navigation/PathFollowingComponent.h"
@@ -26,9 +28,19 @@ AEnemy::AEnemy()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
-	PawnSensing->SightRadius = CombatRadius;
-	PawnSensing->SetPeripheralVisionAngle(65.f);
+	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AI Perception Component"));
+	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
+
+	SightConfig->SightRadius = CombatRadius;
+	SightConfig->LoseSightRadius = CombatRadius + 100.f;
+	SightConfig->PeripheralVisionAngleDegrees = 65.f;
+
+	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+
+	AIPerceptionComponent->SetDominantSense(*SightConfig->GetSenseImplementation());
+	AIPerceptionComponent->ConfigureSense(*SightConfig);
 }
 
 /** <AActor> */
@@ -36,7 +48,7 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	EnemyController = Cast<AAIController>(GetController());
-	if (PawnSensing) PawnSensing->OnSeePawn.AddUniqueDynamic(this, &AEnemy::PawnSeen);
+	if (AIPerceptionComponent) AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemy::PawnSeen);
 
 	HideHealthBar();
 	MoveToTarget(PatrolTarget);
@@ -298,15 +310,16 @@ bool AEnemy::InTargetRange(AActor* Target, double Radius)
 	return DistanceToTarget <= Radius;
 }
 
-void AEnemy::PawnSeen(APawn* SeenPawn)
+void AEnemy::PawnSeen(AActor* Actor, FAIStimulus Stimulus)
 {
 	const bool bShouldChaseTarget =
 		EnemyState == EEnemyState::EES_Patrolling &&
-		SeenPawn->ActorHasTag(FName("SlashCharacter"));
+		Stimulus.WasSuccessfullySensed() &&
+		Actor->ActorHasTag(FName("SlashCharacter"));
 
 	if (bShouldChaseTarget)
 	{
-		CombatTarget = SeenPawn;
+		CombatTarget = Actor;
 		ChaseTarget();
 	}
 }
