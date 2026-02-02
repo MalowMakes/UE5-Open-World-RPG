@@ -92,18 +92,10 @@ void AEnemy::Destroyed()
 }
 
 /** <IHitInterface> */
-void AEnemy::GetHit_Implementation(const FVector& ImpactPoint)
+void AEnemy::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 {
-	ShowHealthBar();
-	if (IsAlive())
-	{
-		DirectionalHitReact(ImpactPoint);
-	}
-	else Die();
-	
-
-	PlayHitSound(ImpactPoint);
-	SpawnHitParticles(ImpactPoint);
+	Super::GetHit_Implementation(ImpactPoint, Hitter);
+	if (!IsDead()) ShowHealthBar();
 }
 
 /** <ABaseCharacter> */
@@ -152,6 +144,7 @@ void AEnemy::Die()
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	HideHealthBar();
 	DisableCapsule();
+	SetWeaponCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetLifeSpan(DeathLifeSpan);
 }
 

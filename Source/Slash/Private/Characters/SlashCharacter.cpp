@@ -81,10 +81,10 @@ void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	}
 }
 
-void ASlashCharacter::GetHit_Implementation(const FVector& ImpactPoint)
+void ASlashCharacter::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 {
-	PlayHitSound(ImpactPoint);
-	SpawnHitParticles(ImpactPoint);
+	Super::GetHit_Implementation(ImpactPoint, Hitter);
+	ActionState = EActionState::EAS_HitReaction;
 }
 
 void ASlashCharacter::Move(const FInputActionValue& Value)
@@ -201,6 +201,11 @@ void ASlashCharacter::AttachWeaponToHand()
 }
 
 void ASlashCharacter::FinishEquipping()
+{
+	ActionState = EActionState::EAS_Unoccupied;
+}
+
+void ASlashCharacter::HitReactEnd()
 {
 	ActionState = EActionState::EAS_Unoccupied;
 }
