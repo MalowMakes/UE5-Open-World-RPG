@@ -119,8 +119,6 @@ private:
 	* Combat Parameters
 	*/
 
-	UPROPERTY()
-	TObjectPtr<AActor> CombatTarget;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float ChaseSpeed = 350.f;

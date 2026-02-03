@@ -80,6 +80,7 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	ApplyDamage(DamageAmount);
 	CombatTarget = EventInstigator->GetPawn();
 	ChaseTarget();
+
 	return DamageAmount;
 }
 
@@ -96,6 +97,9 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 {
 	Super::GetHit_Implementation(ImpactPoint, Hitter);
 	if (!IsDead()) ShowHealthBar();
+	ClearAttackTimer();
+	StopAttackMontage();
+	SetWeaponCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 /** <ABaseCharacter> */
@@ -144,7 +148,6 @@ void AEnemy::Die()
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	HideHealthBar();
 	DisableCapsule();
-	SetWeaponCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetLifeSpan(DeathLifeSpan);
 }
 

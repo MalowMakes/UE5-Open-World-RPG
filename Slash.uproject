@@ -22,6 +22,10 @@
 		{
 			"Name": "VisualStudioTools",
 			"Enabled": false
+		},
+		{
+			"Name": "MotionWarping",
+			"Enabled": true
 		}
 	]
 }

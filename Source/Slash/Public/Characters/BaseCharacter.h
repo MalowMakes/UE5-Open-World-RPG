@@ -35,10 +35,16 @@ protected:
 	void SpawnHitParticles(const FVector& ImpactPoint);
 	bool IsAlive();
 	void DisableCapsule();
-
+	/**
+	* Montage Functions
+	*/
 	void PlayAttackMontage();
 	void PlayHitReactMontage(const FName& SectionName);
 	virtual void PlayDeathMontage();
+	void StopAttackMontage();
+
+	UFUNCTION(BlueprintCallable)
+	FVector GetRotationWarpTarget();
 
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
@@ -51,6 +57,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UAttributeComponent> Attributes;
+
+	UPROPERTY(BlueprintReadOnly, Category = Combat)
+	TObjectPtr<AActor> CombatTarget;
 
 private:
 
