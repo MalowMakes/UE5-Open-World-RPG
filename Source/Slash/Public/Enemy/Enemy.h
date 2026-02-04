@@ -132,10 +132,10 @@ private:
 	FTimerHandle AttackTimer;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
-	float AttackMin = 0.2f;
+	float AttackMin = 0.5f;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
-	float AttackMax = 0.6f;
+	float AttackMax = 0.8f;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float DeathLifeSpan = 8.f;

@@ -14,5 +14,7 @@ Assets
 *.sdf
 *.sln
 *.suo
+*.tga
+*.ttf
 *.xcodeproj
 *.xcworkspace
