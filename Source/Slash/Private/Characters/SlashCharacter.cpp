@@ -9,9 +9,12 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/AttributeComponent.h"
 #include "Items/Item.h"
 #include "Items/Weapons/Weapon.h"
 #include "Animation/AnimMontage.h"
+#include "HUD/SlashHUD.h"
+#include "HUD/SlashOverlay.h"
 
 ASlashCharacter::ASlashCharacter()
 {
@@ -63,6 +66,18 @@ void ASlashCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(SlashContext, 0);
 		}
+		if (ASlashHUD* SlashHUD = Cast<ASlashHUD>(PlayerController->GetHUD()))
+		{
+			SlashOverlay = SlashHUD->GetSlashOverlay();
+			if (SlashOverlay && Attributes)
+			{
+				SlashOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
+				SlashOverlay->SetStaminaBarPercent(1.f);
+				SlashOverlay->SetGold(0);
+				SlashOverlay->SetSouls(0);
+			}
+		}
+		
 	}
 	
 }
@@ -75,15 +90,22 @@ void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	{
 		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Look);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Jump);
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ASlashCharacter::EquipKey);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Attack);
 	}
 }
 
+void ASlashCharacter::Jump()
+{
+	if (ActionState != EActionState::EAS_Unoccupied) return;
+	Super::Jump();
+}
+
 float ASlashCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	ApplyDamage(DamageAmount);
+	SetHUDHealth();
 	return DamageAmount;
 }
 
@@ -214,6 +236,14 @@ void ASlashCharacter::FinishEquipping()
 void ASlashCharacter::HitReactEnd()
 {
 	ActionState = EActionState::EAS_Unoccupied;
+}
+
+void ASlashCharacter::SetHUDHealth()
+{
+	if (SlashOverlay && Attributes)
+	{
+		SlashOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
+	}
 }
 
 
