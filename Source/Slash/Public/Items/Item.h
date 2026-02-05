@@ -54,7 +54,7 @@ protected:
 	TObjectPtr<USphereComponent> Sphere;
 
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<class UNiagaraComponent> EmbersEffect;
+	TObjectPtr<class UNiagaraComponent> ItemEffect;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
