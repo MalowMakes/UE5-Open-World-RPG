@@ -42,6 +42,7 @@ protected:
 	bool CanDisarm();
 	bool CanArm();
 	void PlayEquipMontage(const FName& SectionName);
+	virtual void Die() override;
 
 	UFUNCTION(BlueprintCallable)
 	void AttachWeaponToBack();

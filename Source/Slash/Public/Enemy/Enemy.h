@@ -38,7 +38,6 @@ protected:
 	virtual void Attack() override;
 	virtual void AttackEnd() override;
 	virtual void ApplyDamage(float DamageAmount) override;
-	virtual void PlayDeathMontage() override;
 	virtual void Die() override;	
 
 	/** <AEnemy> */
@@ -127,7 +126,7 @@ private:
 	double CombatRadius = 800.f;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
-	float AttackRadius = 150.f;
+	float AttackRadius = 200.f;
 
 	FTimerHandle AttackTimer;
 

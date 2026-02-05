@@ -115,8 +115,9 @@ bool AEnemy::CanAttack()
 
 void AEnemy::Attack()
 {
-	EnemyState = EEnemyState::EES_Attacking;
 	Super::Attack();
+	if (CombatTarget == nullptr) return;
+	EnemyState = EEnemyState::EES_Attacking;
 	PlayAttackMontage();
 }
 
@@ -135,19 +136,12 @@ void AEnemy::ApplyDamage(float DamageAmount)
 	}
 }
 
-void AEnemy::PlayDeathMontage()
-{
-	Super::PlayDeathMontage();
-}
-
 void AEnemy::Die()
 {
 	EnemyState = EEnemyState::EES_Dead;
+	Super::Die();
 	ClearAttackTimer();
-	PlayDeathMontage();
-	GetCharacterMovement()->bOrientRotationToMovement = false;
 	HideHealthBar();
-	DisableCapsule();
 	SetLifeSpan(DeathLifeSpan);
 }
 
@@ -312,7 +306,8 @@ void AEnemy::PawnSeen(AActor* Actor, FAIStimulus Stimulus)
 	const bool bShouldChaseTarget =
 		EnemyState == EEnemyState::EES_Patrolling &&
 		Stimulus.WasSuccessfullySensed() &&
-		Actor->ActorHasTag(FName("AttackableTarget"));
+		Actor->ActorHasTag(FName("AttackableTarget")) &&
+		!Actor->ActorHasTag(FName("Dead"));
 
 	if (bShouldChaseTarget)
 	{
