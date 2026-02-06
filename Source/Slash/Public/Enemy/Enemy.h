@@ -38,9 +38,11 @@ protected:
 	virtual void Attack() override;
 	virtual void AttackEnd() override;
 	virtual void ApplyDamage(float DamageAmount) override;
-	virtual void Die() override;	
+	virtual void Die() override;
 
 	/** <AEnemy> */
+	void SpawnSoul();
+
 	UPROPERTY(BlueprintReadOnly)
 	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 
@@ -118,7 +120,6 @@ private:
 	* Combat Parameters
 	*/
 
-
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float ChaseSpeed = 350.f;
 
@@ -138,4 +139,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float DeathLifeSpan = 8.f;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	TSubclassOf <class ASoul> SoulClass;
 };

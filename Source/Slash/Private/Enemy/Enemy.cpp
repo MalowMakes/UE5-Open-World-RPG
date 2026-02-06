@@ -6,9 +6,10 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AIPerceptionTypes.h"
+#include "Navigation/PathFollowingComponent.h"
 #include "HUD/HealthBarComponent.h"
 #include "Items/Weapons/Weapon.h"
-#include "Navigation/PathFollowingComponent.h"
+#include "Items/Soul.h"
 
 AEnemy::AEnemy()
 {
@@ -143,6 +144,20 @@ void AEnemy::Die()
 	ClearAttackTimer();
 	HideHealthBar();
 	SetLifeSpan(DeathLifeSpan);
+	SpawnSoul();
+}
+
+void AEnemy::SpawnSoul()
+{
+	UWorld* World = GetWorld();
+	if (World && SoulClass && Attributes)
+	{
+		ASoul* SpawnedSoul = World->SpawnActor<ASoul>(SoulClass, GetActorLocation(), GetActorRotation());
+		if (SpawnedSoul)
+		{
+			SpawnedSoul->SetSouls(Attributes->GetSouls());
+		}
+	}
 }
 
 /** <AEnemy> */
