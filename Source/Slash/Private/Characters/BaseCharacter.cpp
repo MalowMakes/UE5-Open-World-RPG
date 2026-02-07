@@ -68,6 +68,10 @@ void ABaseCharacter::AttackEnd()
 {
 }
 
+void ABaseCharacter::DodgeEnd()
+{
+}
+
 void ABaseCharacter::PlayAttackMontage()
 {
 	PlayRandomMontageSection(AttackMontage);
@@ -76,6 +80,12 @@ void ABaseCharacter::PlayAttackMontage()
 void ABaseCharacter::PlayDeathMontage()
 {
 	PlayRandomMontageSection(DeathMontage);
+}
+
+void ABaseCharacter::PlayDodgeMontage()
+{
+	const FName Section = DodgeMontage->GetSectionName(0);
+	PlayMontageSection(DodgeMontage, Section);
 }
 
 void ABaseCharacter::StopAttackMontage()

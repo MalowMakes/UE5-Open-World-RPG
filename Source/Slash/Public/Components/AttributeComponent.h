@@ -15,6 +15,7 @@ class SLASH_API UAttributeComponent : public UActorComponent
 public:
 	UAttributeComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	void RegenStamina(float DeltaTime);
 
 protected:
 	virtual void BeginPlay() override;
@@ -22,23 +23,40 @@ protected:
 private:
 	// Current Health
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
-	float Health;
+	float Health = 100.f;
 
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
-	float MaxHealth;
+	float MaxHealth = 100.f;
+
+	// Current Stamina
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+	float Stamina = 100.f;
 
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
-	int32 Gold;
+	float MaxStamina = 100.f;
 
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
-	int32 Souls;
+	float DodgeCost = 20.f;
+
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+	float StaminaRegenRate = 2.f;
+
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+	int32 Gold = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+	int32 Souls = 0;;
 
 public:
 	void ReceiveDamage(float Damage);
+	void UseStamina(float StaminaCost);
 	float GetHealthPercent();
+	float GetStaminaPercent();
 	bool IsAlive();
 	void AddSouls(int32 NumberOfSouls);
 	void AddGold(int32 AmountOfGold);
 	FORCEINLINE int32 GetGold() const { return Gold; }
 	FORCEINLINE int32 GetSouls() const { return Souls; }
+	FORCEINLINE float GetDodgeCost() const { return DodgeCost; }
+	FORCEINLINE float GetStamina() const { return Stamina; }
 };

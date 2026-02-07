@@ -28,6 +28,7 @@ class SLASH_API ASlashCharacter : public ABaseCharacter, public IPickupInterface
 
 public:
 	ASlashCharacter();
+	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Jump() override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
@@ -42,11 +43,15 @@ protected:
 	void Look(const FInputActionValue& Value);
 	void EquipKey();
 	void EquipWeapon(AWeapon* Weapon);
+	void Dodge();
+	virtual void DodgeEnd() override;
 	virtual void Attack() override;
 	virtual void AttackEnd() override;
 	virtual bool CanAttack() override;
 	bool CanDisarm();
 	bool CanArm();
+	bool IsOccupied();
+	bool HasEnoughStamina();
 	void PlayEquipMontage(const FName& SectionName);
 	virtual void Die() override;
 
@@ -83,6 +88,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> AttackAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> DodgeAction;
 
 private:
 	void SetHUDHealth();
