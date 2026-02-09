@@ -129,6 +129,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float AttackRadius = 200.f;
 
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float AcceptanceRadius = 50.f;
+
 	FTimerHandle AttackTimer;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
