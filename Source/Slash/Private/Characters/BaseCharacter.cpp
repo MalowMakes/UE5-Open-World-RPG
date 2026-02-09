@@ -133,6 +133,7 @@ void ABaseCharacter::PlayMontageSection(UAnimMontage* Montage, const FName& Sect
 
 void ABaseCharacter::PlayRandomMontageSection(UAnimMontage* Montage)
 {
+	if (Montage == nullptr) return;
 	const int32 MontageSections = Montage->GetNumSections();
 	if (MontageSections <= 0) return;
 	const int32 Selection = FMath::RandRange(0, MontageSections - 1);

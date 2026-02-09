@@ -54,7 +54,7 @@ void AEnemy::BeginPlay()
 	HideHealthBar();
 	MoveToTarget(PatrolTarget);
 	UWorld* World = GetWorld();
-	if (World)
+	if (World && WeaponClass)
 	{
 		AWeapon* DefaultWeapon = World->SpawnActor<AWeapon>(WeaponClass);
 		DefaultWeapon->Equip(GetMesh(), FName("RightHandSocket"), this, this);
