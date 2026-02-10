@@ -216,6 +216,10 @@ void ASlashCharacter::DodgeEnd()
 
 void ASlashCharacter::EquipWeapon(AWeapon* Weapon)
 {
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->Destroy();
+	}
 	Weapon->Equip(GetMesh(), FName("RightHandSocket"), this, this);
 	CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
 	OverlappingItem = nullptr;
