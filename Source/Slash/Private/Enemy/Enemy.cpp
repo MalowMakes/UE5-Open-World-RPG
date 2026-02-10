@@ -10,6 +10,7 @@
 #include "HUD/HealthBarComponent.h"
 #include "Items/Weapons/Weapon.h"
 #include "Items/Soul.h"
+#include "Kismet/GameplayStatics.h"
 
 AEnemy::AEnemy()
 {
@@ -149,14 +150,17 @@ void AEnemy::Die_Implementation()
 
 void AEnemy::SpawnSoul()
 {
+
 	UWorld* World = GetWorld();
 	if (World && SoulClass && Attributes)
 	{
-		ASoul* SpawnedSoul = World->SpawnActor<ASoul>(SoulClass, GetActorLocation(), GetActorRotation());
+		const FTransform SpawnTransform = FTransform(GetActorRotation(), GetActorLocation());
+		ASoul* SpawnedSoul = World->SpawnActorDeferred<ASoul>(SoulClass, SpawnTransform);
 		if (SpawnedSoul)
 		{
 			SpawnedSoul->SetSouls(Attributes->GetSouls());
 		}
+		UGameplayStatics::FinishSpawningActor(SpawnedSoul, SpawnTransform);
 	}
 }
 
