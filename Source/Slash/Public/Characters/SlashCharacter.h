@@ -53,7 +53,7 @@ protected:
 	bool IsOccupied();
 	bool HasEnoughStamina();
 	void PlayEquipMontage(const FName& SectionName);
-	virtual void Die() override;
+	virtual void Die_Implementation() override;
 
 	UFUNCTION(BlueprintCallable)
 	void AttachWeaponToBack();

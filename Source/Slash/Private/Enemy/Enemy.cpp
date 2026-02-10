@@ -137,10 +137,10 @@ void AEnemy::ApplyDamage(float DamageAmount)
 	}
 }
 
-void AEnemy::Die()
+void AEnemy::Die_Implementation()
 {
 	EnemyState = EEnemyState::EES_Dead;
-	Super::Die();
+	Super::Die_Implementation();
 	ClearAttackTimer();
 	HideHealthBar();
 	SetLifeSpan(DeathLifeSpan);

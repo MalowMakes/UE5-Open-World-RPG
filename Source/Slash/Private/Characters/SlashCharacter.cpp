@@ -275,10 +275,10 @@ void ASlashCharacter::PlayEquipMontage(const FName& SectionName)
 	}
 }
 
-void ASlashCharacter::Die()
+void ASlashCharacter::Die_Implementation()
 {
 	ActionState = EActionState::EAS_Dead;
-	Super::Die();
+	Super::Die_Implementation();
 }
 
 void ASlashCharacter::AttachWeaponToBack()
