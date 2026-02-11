@@ -14,6 +14,7 @@
 #include "Items/Weapons/Weapon.h"
 #include "Items/Soul.h"
 #include "Items/Treasure.h"
+#include "Items/HealthPot.h"
 #include "Animation/AnimMontage.h"
 #include "HUD/SlashHUD.h"
 #include "HUD/SlashOverlay.h"
@@ -147,6 +148,15 @@ void ASlashCharacter::AddGold(ATreasure* Treasure)
 	{
 		Attributes->AddGold(Treasure->GetGold());
 		SlashOverlay->SetGold(Attributes->GetGold());
+	}
+}
+
+void ASlashCharacter::AddHealth(AHealthPot* HealthPot)
+{
+	if (Attributes && SlashOverlay)
+	{
+		Attributes->AddHealth(HealthPot->GetHeal());
+		SetHUDHealth();
 	}
 }
 
