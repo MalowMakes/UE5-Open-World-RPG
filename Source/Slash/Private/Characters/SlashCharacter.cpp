@@ -131,6 +131,20 @@ void ASlashCharacter::GetHit_Implementation(const FVector& ImpactPoint, AActor* 
 void ASlashCharacter::SetOverlappingItem(AItem* Item)
 {
 	OverlappingItem = Item;
+	if (OverlappingItem && OverlappingItem->ActorHasTag(FName("Weapon")))
+	{
+		if (SlashOverlay)
+		{
+			SlashOverlay->SetEquipTextVisibility(ESlateVisibility::Visible);
+		}
+	}
+	else
+	{
+		if (SlashOverlay)
+		{
+			SlashOverlay->SetEquipTextVisibility(ESlateVisibility::Hidden);
+		}
+	}
 }
 
 void ASlashCharacter::AddSouls(ASoul* Soul)

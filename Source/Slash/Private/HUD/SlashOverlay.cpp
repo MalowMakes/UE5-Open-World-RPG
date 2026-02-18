@@ -36,3 +36,11 @@ void USlashOverlay::SetSouls(int32 Souls)
 		SoulsText->SetText(FText::AsNumber(Souls));
 	}
 }
+
+void USlashOverlay::SetEquipTextVisibility(ESlateVisibility EquipVisibility)
+{
+	if (EquipText)
+	{
+		EquipText->SetVisibility(EquipVisibility);
+	}
+}

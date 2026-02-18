@@ -18,6 +18,7 @@ public:
 	void SetStaminaBarPercent(float Percent);
 	void SetGold(int32 Gold);
 	void SetSouls(int32 Souls);
+	void SetEquipTextVisibility(ESlateVisibility EquipVisibility);
 
 private:
 	UPROPERTY(Meta = (BindWidget))
@@ -31,5 +32,8 @@ private:
 
 	UPROPERTY(Meta = (BindWidget))
 	TObjectPtr<class UTextBlock> SoulsText;
+
+	UPROPERTY(Meta = (BindWidget))
+	TObjectPtr<class UTextBlock> EquipText;
 	
 };

@@ -23,6 +23,8 @@ AWeapon::AWeapon()
 
 	BoxTraceEnd = CreateDefaultSubobject<USceneComponent>(TEXT("Box Trace End"));
 	BoxTraceEnd->SetupAttachment(GetRootComponent());
+
+	Tags.Add(FName("Weapon"));
 }
 
 void AWeapon::BeginPlay()
