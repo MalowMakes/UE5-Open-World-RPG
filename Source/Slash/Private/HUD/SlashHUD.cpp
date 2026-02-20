@@ -3,6 +3,8 @@
 
 #include "HUD/SlashHUD.h"
 #include "HUD/SlashOverlay.h"
+#include "HUD/SlashScoreboard.h"
+
 
 void ASlashHUD::PreInitializeComponents()
 {
@@ -21,4 +23,18 @@ void ASlashHUD::PreInitializeComponents()
 void ASlashHUD::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void ASlashHUD::CreateScoreboard()
+{
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		APlayerController* Controller = World->GetFirstPlayerController();
+		if (Controller && SlashScoreboardClass)
+		{
+			SlashScoreboard = CreateWidget<USlashScoreboard>(Controller, SlashScoreboardClass);
+			SlashScoreboard->AddToViewport();
+		}
+	}
 }

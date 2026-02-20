@@ -7,6 +7,7 @@
 #include "SlashHUD.generated.h"
 
 class USlashOverlay;
+class USlashScoreboard;
 
 /**
  * 
@@ -20,6 +21,9 @@ protected:
 	virtual void PreInitializeComponents() override;
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable)
+	void CreateScoreboard();
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = Slash)
 	TSubclassOf<USlashOverlay> SlashOverlayClass;
@@ -27,6 +31,13 @@ private:
 	UPROPERTY()
 	TObjectPtr<USlashOverlay> SlashOverlay;
 
+	UPROPERTY(EditDefaultsOnly, Category = Slash)
+	TSubclassOf<USlashScoreboard> SlashScoreboardClass;
+
+	UPROPERTY()
+	TObjectPtr<USlashScoreboard> SlashScoreboard;
+
 public:
-	FORCEINLINE USlashOverlay* GetSlashOverlay() const { return SlashOverlay; }
+	UFUNCTION(BlueprintPure)
+	USlashOverlay* GetSlashOverlay() const { return SlashOverlay; }
 };

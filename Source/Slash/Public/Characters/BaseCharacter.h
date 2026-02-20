@@ -95,4 +95,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	TObjectPtr<UAnimMontage> DodgeMontage;
 
+public:
+	// This allows the UI to "Get" the attributes without being able to "Set" them
+	FORCEINLINE UAttributeComponent* GetAttributes() const { return Attributes; }
 };
