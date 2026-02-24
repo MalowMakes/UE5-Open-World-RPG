@@ -58,6 +58,12 @@ protected:
 	virtual void Die_Implementation() override;
 
 	UFUNCTION(BlueprintCallable)
+	void SetupOverlay(APlayerController* PlayerController);
+
+	UFUNCTION(BlueprintCallable)
+	void HolsterWeapon();
+
+	UFUNCTION(BlueprintCallable)
 	void AttachWeaponToBack();
 
 	UFUNCTION(BlueprintCallable)

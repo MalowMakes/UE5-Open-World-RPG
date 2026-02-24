@@ -8,6 +8,22 @@
 
 void ASlashHUD::PreInitializeComponents()
 {
+	CreateIntro();
+}
+
+void ASlashHUD::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void ASlashHUD::CreateOverlay()
+{
+	if (SlashIntro)
+	{
+		SlashIntro->RemoveFromParent();
+		SlashIntro = nullptr;
+	}
+
 	UWorld* World = GetWorld();
 	if (World)
 	{
@@ -20,9 +36,18 @@ void ASlashHUD::PreInitializeComponents()
 	}
 }
 
-void ASlashHUD::BeginPlay()
+void ASlashHUD::CreateIntro()
 {
-	Super::BeginPlay();
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		APlayerController* Controller = World->GetFirstPlayerController();
+		if (Controller && SlashIntroClass)
+		{
+			SlashIntro = CreateWidget<UUserWidget>(Controller, SlashIntroClass);
+			SlashIntro->AddToViewport();
+		}
+	}
 }
 
 void ASlashHUD::CreateScoreboard()

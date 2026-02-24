@@ -8,6 +8,7 @@
 
 class USlashOverlay;
 class USlashScoreboard;
+class UUserWidget;
 
 /**
  * 
@@ -20,6 +21,12 @@ class SLASH_API ASlashHUD : public AHUD
 protected:
 	virtual void PreInitializeComponents() override;
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable)
+	void CreateOverlay();
+
+	UFUNCTION(BlueprintCallable)
+	void CreateIntro();
 
 	UFUNCTION(BlueprintCallable)
 	void CreateScoreboard();
@@ -37,7 +44,16 @@ private:
 	UPROPERTY()
 	TObjectPtr<USlashScoreboard> SlashScoreboard;
 
+	UPROPERTY(EditDefaultsOnly, Category = Slash)
+	TSubclassOf<UUserWidget> SlashIntroClass;
+
+	UPROPERTY()
+	TObjectPtr<UUserWidget> SlashIntro;
+
 public:
 	UFUNCTION(BlueprintPure)
 	USlashOverlay* GetSlashOverlay() const { return SlashOverlay; }
+
+	UFUNCTION(BlueprintPure)
+	UUserWidget* GetSlashIntro() const { return SlashIntro; }
 };

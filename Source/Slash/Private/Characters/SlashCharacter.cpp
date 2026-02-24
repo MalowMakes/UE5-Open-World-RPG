@@ -78,20 +78,25 @@ void ASlashCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(SlashContext, 0);
 		}
-		if (ASlashHUD* SlashHUD = Cast<ASlashHUD>(PlayerController->GetHUD()))
-		{
-			SlashOverlay = SlashHUD->GetSlashOverlay();
-			if (SlashOverlay && Attributes)
-			{
-				SlashOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
-				SlashOverlay->SetStaminaBarPercent(1.f);
-				SlashOverlay->SetGold(0);
-				SlashOverlay->SetSouls(0);
-			}
-		}
+		SetupOverlay(PlayerController);
 		
 	}
 	
+}
+
+void ASlashCharacter::SetupOverlay(APlayerController* PlayerController)
+{
+	if (ASlashHUD* SlashHUD = Cast<ASlashHUD>(PlayerController->GetHUD()))
+	{
+		SlashOverlay = SlashHUD->GetSlashOverlay();
+		if (SlashOverlay && Attributes)
+		{
+			SlashOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
+			SlashOverlay->SetStaminaBarPercent(1.f);
+			SlashOverlay->SetGold(0);
+			SlashOverlay->SetSouls(0);
+		}
+	}
 }
 
 void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -207,9 +212,7 @@ void ASlashCharacter::EquipKey()
 	else {
 		if (CanDisarm() )
 		{
-			PlayEquipMontage(FName("Unequip"));
-			CharacterState = ECharacterState::ECS_Unequipped;
-			ActionState = EActionState::EAS_EquippingWeapon;
+			HolsterWeapon();
 		}
 		else if (CanArm())
 		{
@@ -218,6 +221,14 @@ void ASlashCharacter::EquipKey()
 			ActionState = EActionState::EAS_EquippingWeapon;
 		}
 	}
+}
+
+void ASlashCharacter::HolsterWeapon()
+{
+	if (!CanDisarm()) return;
+	PlayEquipMontage(FName("Unequip"));
+	CharacterState = ECharacterState::ECS_Unequipped;
+	ActionState = EActionState::EAS_EquippingWeapon;
 }
 
 void ASlashCharacter::Dodge()
