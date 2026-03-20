@@ -238,6 +238,7 @@ void AEnemy::ChaseTarget()
 void AEnemy::LoseInterest()
 {
 	CombatTarget = nullptr;
+	IsFirstAttack = true;
 	HideHealthBar();
 }
 
@@ -279,7 +280,12 @@ bool AEnemy::IsDead()
 void AEnemy::StartAttackTimer()
 {
 	EnemyState = EEnemyState::EES_Engaged;
-	const float AttackTime = FMath::RandRange(AttackMin, AttackMax);
+	float AttackTime = FMath::RandRange(AttackMin, AttackMax);
+	if (IsFirstAttack)
+	{
+		AttackTime = .05;
+		IsFirstAttack = false;
+	}
 	GetWorldTimerManager().SetTimer(AttackTimer, this, &AEnemy::Attack, AttackTime);
 }
 

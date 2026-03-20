@@ -140,6 +140,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float AttackMax = 0.8f;
 
+	UPROPERTY(VisibleAnywhere, Category = Combat)
+	bool IsFirstAttack = true;
+
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float DeathLifeSpan = 8.f;
 
