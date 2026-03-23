@@ -37,6 +37,7 @@ protected:
 	virtual bool CanAttack() override;
 	virtual void Attack() override;
 	virtual void AttackEnd() override;
+	virtual void HitReactEnd() override;
 	virtual void ApplyDamage(float DamageAmount) override;
 	virtual void Die_Implementation() override;
 

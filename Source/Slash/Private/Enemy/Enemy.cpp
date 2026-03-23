@@ -81,6 +81,7 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 {
 	ApplyDamage(DamageAmount);
 	CombatTarget = EventInstigator->GetPawn();
+	IsFirstAttack = false;
 	ChaseTarget();
 
 	return DamageAmount;
@@ -126,6 +127,13 @@ void AEnemy::Attack()
 void AEnemy::AttackEnd()
 {
 	EnemyState = EEnemyState::EES_NoState;
+	CheckCombatTarget();
+}
+
+void AEnemy::HitReactEnd()
+{
+	EnemyState = EEnemyState::EES_NoState;
+	ClearAttackTimer();
 	CheckCombatTarget();
 }
 

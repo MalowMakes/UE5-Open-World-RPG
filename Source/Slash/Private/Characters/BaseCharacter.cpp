@@ -72,6 +72,10 @@ void ABaseCharacter::DodgeEnd()
 {
 }
 
+void ABaseCharacter::HitReactEnd()
+{
+}
+
 void ABaseCharacter::PlayAttackMontage()
 {
 	PlayRandomMontageSection(AttackMontage);

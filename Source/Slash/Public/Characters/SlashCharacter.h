@@ -49,6 +49,7 @@ protected:
 	virtual void DodgeEnd() override;
 	virtual void Attack() override;
 	virtual void AttackEnd() override;
+	virtual void HitReactEnd() override;
 	virtual bool CanAttack() override;
 	bool CanDisarm();
 	bool CanArm();
@@ -71,9 +72,6 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void FinishEquipping();
-
-	UFUNCTION(BlueprintCallable)
-	void HitReactEnd();
 
 	/**
 	* Action Inputs

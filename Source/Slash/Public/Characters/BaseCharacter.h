@@ -59,6 +59,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	virtual void DodgeEnd();
 
+	UFUNCTION(BlueprintCallable)
+	virtual void HitReactEnd();
+
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
 	TObjectPtr<AWeapon> EquippedWeapon;
 
