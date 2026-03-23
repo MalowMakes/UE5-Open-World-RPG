@@ -28,7 +28,7 @@ ASlashCharacter::ASlashCharacter()
 	bUseControllerRotationYaw = false;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.f, 600.f, 0.f);
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 450.f, 0.f);
 
 	GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	GetMesh()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
