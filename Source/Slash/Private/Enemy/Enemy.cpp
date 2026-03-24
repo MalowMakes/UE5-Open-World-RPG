@@ -344,6 +344,14 @@ void AEnemy::PawnSeen(AActor* Actor, FAIStimulus Stimulus)
 
 	if (bShouldChaseTarget)
 	{
+		if (PerceptionSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(
+				this,
+				PerceptionSound,
+				this->GetActorLocation()
+			);
+		}
 		CombatTarget = Actor;
 		ChaseTarget();
 	}

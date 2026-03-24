@@ -93,6 +93,9 @@ private:
 	UPROPERTY()
 	TObjectPtr<class AAIController> EnemyController;
 
+	UPROPERTY(EditAnywhere, Category = Sounds)
+	TObjectPtr<USoundBase> PerceptionSound;
+
 	/**
 	* Patrol Parameters
 	*/
