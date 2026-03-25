@@ -10,6 +10,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/AttributeComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "Items/Item.h"
 #include "Items/Weapons/Weapon.h"
 #include "Items/Soul.h"
@@ -111,6 +113,7 @@ void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Triggered, this, &ASlashCharacter::EquipKey);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Attack);
 		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &ASlashCharacter::Dodge);
+		EnhancedInputComponent->BindAction(QuitAction, ETriggerEvent::Triggered, this, &ASlashCharacter::QuitGame);
 	}
 }
 
@@ -240,6 +243,24 @@ void ASlashCharacter::Dodge()
 	{
 		Attributes->UseStamina(Attributes->GetDodgeCost());
 		SlashOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
+	}
+}
+
+void ASlashCharacter::QuitGame()
+{
+	UWorld* WorldRef = GetWorld();
+
+	if (WorldRef)
+	{
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(WorldRef, 0);
+		TEnumAsByte<EQuitPreference::Type> QuitPreference = EQuitPreference::Quit;
+
+		UKismetSystemLibrary::QuitGame(
+			WorldRef,
+			PlayerController,
+			QuitPreference,
+			true
+		);
 	}
 }
 

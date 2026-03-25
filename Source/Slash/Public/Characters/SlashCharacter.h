@@ -46,6 +46,7 @@ protected:
 	void EquipKey();
 	void EquipWeapon(AWeapon* Weapon);
 	void Dodge();
+	void QuitGame();
 	virtual void DodgeEnd() override;
 	virtual void Attack() override;
 	virtual void AttackEnd() override;
@@ -97,6 +98,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> DodgeAction;
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputAction> QuitAction;
 
 private:
 	void SetHUDHealth();
