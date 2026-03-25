@@ -4,25 +4,27 @@ This project was developed as a vehicle to build and showcase my skills working 
 
 # Credits
 
-## ASSET PACKS
-Free Fantasy Weapon Sample Pack - Prop Garden LLC from Fab
-Medieval Dungeon - Infuse Studio From Fab
-Ancient Treasure - Dekogon Studios from Fab
-Mediterranean Vegetation: Plant Pack II - Project Nature from Fab
+Listed below are the outside assets used in this project.
 
-## MODELS
-Character models - Epic games and Mixamo
-Medieval Torch - Apex Wolf from Fab
-Bonfire - ToxaGrom from Fab
-Environment from Quixel Megascans
+## Asset Packs
+- Free Fantasy Weapon Sample Pack - Prop Garden LLC from Fab
+- Medieval Dungeon - Infuse Studio From Fab
+- Ancient Treasure - Dekogon Studios from Fab
+- Mediterranean Vegetation: Plant Pack II - Project Nature from Fab
 
-## SOUNDS
-Fire Crackling - Sound Effect by DRAGON-STUDIO from Pixabay
-Designed Fire Winds Swoosh - 0GregorQuendel from Pixabay
-Ambient Sounds at Night - Sound Effect by Simjoo from Pixabay
-Forest Soundscape (Night Time) - Sound Effect by CapaholiczSFX from Pixabay
-You are in a crypt - Travis Savoie from Youtube
-Coins - Sound Effect by Eric Matyas from Soundimage.org
+## Models
+- Character models - Epic games and Mixamo
+- Medieval Torch - Apex Wolf from Fab
+- Bonfire - ToxaGrom from Fab
+- Environment from Quixel Megascans
+
+## Sounds
+- Fire Crackling - Sound Effect by DRAGON-STUDIO from Pixabay
+- Designed Fire Winds Swoosh - 0GregorQuendel from Pixabay
+- Ambient Sounds at Night - Sound Effect by Simjoo from Pixabay
+- Forest Soundscape (Night Time) - Sound Effect by CapaholiczSFX from Pixabay
+- You are in a crypt - Travis Savoie from Youtube
+- Coins - Sound Effect by Eric Matyas from Soundimage.org
 
 # Thanks
 Thank you to the wonderful community of artists and developers who release free assets for developers like me to utilize!
