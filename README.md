@@ -1,3 +1,27 @@
 # UE5 RPG Demo
 
 This project was developed as a vehicle to build and showcase my skills working within Unreal Engine 5 C++. My goal with this project was to touch as many different areas of the game development proccess as I could, and I feel I succeeded in that regard. Going from a completely blank UE5 project to having a playable vertical slice of a game that uses photoreal assets was a humbling, informative, and truly inspiring experience. I am excited to take all of the experience gathered from this project, and apply it to my first publicly available indie release!
+
+# CREDITS
+
+## ASSET PACKS:
+Free Fantasy Weapon Sample Pack - Prop Garden LLC from Fab
+Medieval Dungeon - Infuse Studio From Fab
+Ancient Treasure - Dekogon Studios from Fab
+Mediterranean Vegetation: Plant Pack II - Project Nature from Fab
+
+## MODELS:
+Character models - Epic games and Mixamo
+Medieval Torch - Apex Wolf from Fab
+Bonfire - ToxaGrom from Fab
+Environment from Quixel Megascans
+
+## SOUNDS:
+Fire Crackling - Sound Effect by DRAGON-STUDIO from Pixabay
+Designed Fire Winds Swoosh - 0GregorQuendel from Pixabay
+Ambient Sounds at Night - Sound Effect by Simjoo from Pixabay
+Forest Soundscape (Night Time) - Sound Effect by CapaholiczSFX from Pixabay
+You are in a crypt - Travis Savoie from Youtube
+Coins - Sound Effect by Eric Matyas from Soundimage.org
+
+# Thank you to the wonderful community of artists and developers who release free assets for developers like me to play with! :)
