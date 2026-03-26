@@ -6,8 +6,7 @@ This project was developed as a vehicle to build and showcase my skills working 
 # Demo Video + Dev Reel
 
 > Click the image below to see the full demo + development footage!
-
-[![Watch the video](https://img.youtube.com/vi/c-lHqu6hdz4/maxresdefault.jpg)](https://www.youtube.com/embed/c-lHqu6hdz4)
+[<img width="800" height="450" src="https://github.com/user-attachments/assets/03cc3802-9d73-470d-bd12-a9b6f33f127b" />](https://www.youtube.com/embed/c-lHqu6hdz4)
 
 # Credits
 
