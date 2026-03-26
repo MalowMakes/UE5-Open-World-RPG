@@ -1,12 +1,13 @@
 # UE5 RPG Demo
+![SlashGif1](https://github.com/user-attachments/assets/60a7358f-e5ae-4248-899a-4e4e29f68c50)
 
 This project was developed as a vehicle to build and showcase my skills working within Unreal Engine 5 C++. My goal with this project was to touch as many different areas of the game development proccess as I could, and I feel I succeeded in that regard. Going from a completely blank UE5 project to having a playable vertical slice of a game that uses photoreal assets was a humbling, informative, and truly inspiring experience. I am excited to take all of the experience gathered from this project, and apply it to my first publicly available indie release!
 
 # Demo Video + Dev Reel
 
-> Click the image below to see the game!
+> Click the image below to see the full demo + development footage!
 
-[![Watch the video](https://img.youtube.com/vi/c-lHqu6hdz4/hqdefault.jpg)](https://www.youtube.com/embed/c-lHqu6hdz4)
+[![Watch the video](https://img.youtube.com/vi/c-lHqu6hdz4/maxresdefault.jpg)](https://www.youtube.com/embed/c-lHqu6hdz4)
 
 # Credits
 
@@ -33,4 +34,7 @@ Listed below are the outside assets used in this project.
 - Coins - Sound Effect by Eric Matyas from Soundimage.org
 
 # Thanks
-Thank you to the wonderful community of artists and developers who release free assets for developers like me to utilize!
+Thank you to the wonderful community of artists and developers who release free assets for developers like me to utilize!  
+
+![SlashGif2](https://github.com/user-attachments/assets/3a2473dd-ea95-43d5-bea6-67c57a8b9ca2)
+
